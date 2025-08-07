@@ -1,0 +1,380 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Register & Login with Details Tabs</title>
+<img src="C:\Users\Admin 1\Pictures\pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_1978396.jpg"" alt="Login Logo" style="display:block; margin: 0 auto 15px auto; max-width: 150px;" />
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+    background-color: #f4f4f4;
+  }
+  .tabs {
+    max-width: 400px;
+    margin: auto;
+  }
+  .tab-buttons {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  .tab-buttons button {
+    flex: 1;
+    padding: 12px;
+    cursor: pointer;
+    background: #ddd;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    font-weight: bold;
+    outline: none;
+  }
+  .tab-buttons button.active {
+    background: white;
+    border-bottom: 2px solid #28a745;
+    color: #28a745;
+  }
+  .tab-content {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  form label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+  }
+  input[type="text"], input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: -8px;
+    margin-bottom: 8px;
+  }
+  button.submit-btn {
+    background-color: #28a745;
+    border: none;
+    padding: 12px;
+    color: white;
+    width: 100%;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  button.submit-btn:hover {
+    background-color: #218838;
+  }
+  .success-message {
+    color: green;
+    font-weight: bold;
+    margin-top: 15px;
+    text-align: center;
+  }
+  .details p {
+    margin: 8px 0;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <div class="tab-buttons">
+    <button id="tabRegister" class="active">Register</button>
+    <button id="tabLogin">Login</button>
+    <button id="tabDetails">Details</button>
+  </div>
+
+  <!-- Registration Tab -->
+  <div id="registerContent" class="tab-content">
+    <form id="registrationForm" novalidate>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" />
+      <div class="error" id="usernameError"></div>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" />
+      <div class="error" id="emailError"></div>
+
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" name="phone" />
+      <div class="error" id="phoneError"></div>
+
+      <label>Gender:</label>
+      <div>
+        <label><input type="radio" name="gender" value="Male" /> Male</label>
+        <label><input type="radio" name="gender" value="Female" /> Female</label>
+        <label><input type="radio" name="gender" value="Other" /> Other</label>
+      </div>
+      <div class="error" id="genderError"></div>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" />
+      <div class="error" id="passwordError"></div>
+
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" />
+      <div class="error" id="confirmPasswordError"></div>
+
+      <button type="submit" class="submit-btn">Register</button>
+      <div class="success-message" id="registrationSuccess"></div>
+    </form>
+  </div>
+
+  <!-- Login Tab -->
+  <div id="loginContent" class="tab-content" style="display:none;">
+    <form id="loginForm" novalidate>
+      <label for="loginUsername">Username:</label>
+      <input type="text" id="loginUsername" name="loginUsername" />
+      <div class="error" id="loginUsernameError"></div>
+
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" name="loginPassword" />
+      <div class="error" id="loginPasswordError"></div>
+
+      <button type="submit" class="submit-btn">Login</button>
+      <div class="success-message" id="loginSuccess"></div>
+      <div class="error" id="loginError"></div>
+    </form>
+  </div>
+
+  <!-- Details Tab -->
+  <div id="detailsContent" class="tab-content" style="display:none;">
+    <h3>User Details</h3>
+    <div class="details" id="userDetails">
+      <p>No user data to display. Please register or login.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tab switching
+  const tabRegisterBtn = document.getElementById('tabRegister');
+  const tabLoginBtn = document.getElementById('tabLogin');
+  const tabDetailsBtn = document.getElementById('tabDetails');
+
+  const registerContent = document.getElementById('registerContent');
+  const loginContent = document.getElementById('loginContent');
+  const detailsContent = document.getElementById('detailsContent');
+
+  function switchTab(tab) {
+    // Reset active buttons
+    [tabRegisterBtn, tabLoginBtn, tabDetailsBtn].forEach(btn => btn.classList.remove('active'));
+    [registerContent, loginContent, detailsContent].forEach(c => c.style.display = 'none');
+
+    if (tab === 'register') {
+      tabRegisterBtn.classList.add('active');
+      registerContent.style.display = 'block';
+    } else if (tab === 'login') {
+      tabLoginBtn.classList.add('active');
+      loginContent.style.display = 'block';
+    } else if (tab === 'details') {
+      tabDetailsBtn.classList.add('active');
+      detailsContent.style.display = 'block';
+    }
+  }
+
+  tabRegisterBtn.onclick = () => switchTab('register');
+  tabLoginBtn.onclick = () => switchTab('login');
+  tabDetailsBtn.onclick = () => switchTab('details');
+
+  // Variables to store user data in memory
+  let registeredUser = null;
+
+  // Registration form elements and errors
+  const regForm = document.getElementById('registrationForm');
+  const username = document.getElementById('username');
+  const email = document.getElementById('email');
+  const phone = document.getElementById('phone');
+  const genderRadios = document.getElementsByName('gender');
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+
+  const usernameError = document.getElementById('usernameError');
+  const emailError = document.getElementById('emailError');
+  const phoneError = document.getElementById('phoneError');
+  const genderError = document.getElementById('genderError');
+  const passwordError = document.getElementById('passwordError');
+  const confirmPasswordError = document.getElementById('confirmPasswordError');
+  const registrationSuccess = document.getElementById('registrationSuccess');
+
+  // Login form elements and errors
+  const loginForm = document.getElementById('loginForm');
+  const loginUsername = document.getElementById('loginUsername');
+  const loginPassword = document.getElementById('loginPassword');
+  const loginUsernameError = document.getElementById('loginUsernameError');
+  const loginPasswordError = document.getElementById('loginPasswordError');
+  const loginSuccess = document.getElementById('loginSuccess');
+  const loginError = document.getElementById('loginError');
+
+  // Details display
+  const userDetails = document.getElementById('userDetails');
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function validatePhone(phone) {
+    return /^\d{7,15}$/.test(phone);
+  }
+
+  function getSelectedGender() {
+    for (const radio of genderRadios) {
+      if (radio.checked) return radio.value;
+    }
+    return null;
+  }
+
+  function displayUserDetails(user, message = '') {
+    if (!user) {
+      userDetails.innerHTML = '<p>No user data to display. Please register or login.</p>';
+      return;
+    }
+    userDetails.innerHTML = `
+      ${message ? `<p><em>${message}</em></p>` : ''}
+      <p><strong>Username:</strong> ${user.username}</p>
+      <p><strong>Email:</strong> ${user.email}</p>
+      <p><strong>Phone:</strong> ${user.phone}</p>
+      <p><strong>Gender:</strong> ${user.gender}</p>
+    `;
+  }
+
+  regForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    // Clear errors
+    usernameError.textContent = '';
+    emailError.textContent = '';
+    phoneError.textContent = '';
+    genderError.textContent = '';
+    passwordError.textContent = '';
+    confirmPasswordError.textContent = '';
+    registrationSuccess.textContent = '';
+
+    let valid = true;
+
+    if (username.value.trim() === '') {
+      usernameError.textContent = 'Username is required';
+      valid = false;
+    } else if (username.value.trim().length < 3) {
+      usernameError.textContent = 'Username must be at least 3 characters';
+      valid = false;
+    }
+
+    if (email.value.trim() === '') {
+      emailError.textContent = 'Email is required';
+      valid = false;
+    } else if (!validateEmail(email.value.trim())) {
+      emailError.textContent = 'Invalid email format';
+      valid = false;
+    }
+
+    if (phone.value.trim() === '') {
+      phoneError.textContent = 'Phone number is required';
+      valid = false;
+    } else if (!validatePhone(phone.value.trim())) {
+      phoneError.textContent = 'Invalid phone number (digits only, 7-15 chars)';
+      valid = false;
+    }
+
+    const gender = getSelectedGender();
+    if (!gender) {
+      genderError.textContent = 'Please select gender';
+      valid = false;
+    }
+
+    if (password.value === '') {
+      passwordError.textContent = 'Password is required';
+      valid = false;
+    } else if (password.value.length < 6) {
+      passwordError.textContent = 'Password must be at least 6 characters';
+      valid = false;
+    }
+
+    if (confirmPassword.value === '') {
+      confirmPasswordError.textContent = 'Confirm your password';
+      valid = false;
+    } else if (confirmPassword.value !== password.value) {
+      confirmPasswordError.textContent = 'Passwords do not match';
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Store user data
+    registeredUser = {
+      username: username.value.trim(),
+      email: email.value.trim(),
+      phone: phone.value.trim(),
+      gender: gender,
+      password: password.value, // in real apps, hash it!
+    };
+
+    registrationSuccess.textContent = 'Registration successful! You can now login.';
+    regForm.reset();
+
+    // Switch to Login tab automatically after registration
+    switchTab('login');
+  });
+
+
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    // Clear errors and messages
+    loginUsernameError.textContent = '';
+    loginPasswordError.textContent = '';
+    loginError.textContent = '';
+    loginSuccess.textContent = '';
+
+    let valid = true;
+
+    if (loginUsername.value.trim() === '') {
+      loginUsernameError.textContent = 'Username is required';
+      valid = false;
+    }
+
+    if (loginPassword.value === '') {
+      loginPasswordError.textContent = 'Password is required';
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Check login credentials
+    if (!registeredUser) {
+      loginError.textContent = 'No registered user found. Please register first.';
+      return;
+    }
+
+    if (
+      loginUsername.value.trim() === registeredUser.username &&
+      loginPassword.value === registeredUser.password
+    ) {
+      loginSuccess.textContent = 'Login successful!';
+
+      // Show details tab with user info and message
+      displayUserDetails(registeredUser, 'Logged in user:');
+
+      // Switch to details tab
+      switchTab('details');
+
+      // Reset login form
+      loginForm.reset();
+    } else {
+      loginError.textContent = 'Invalid username or password.';
+    }
+  });
+</script>
+
+</body>
+</html>
